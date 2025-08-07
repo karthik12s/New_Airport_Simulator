@@ -1,6 +1,6 @@
 
 from sqlalchemy import (
-    DATETIME, TIME, Boolean, DateTime, ForeignKey, Integer, Column, Integer, String
+     Time, Boolean, DateTime, ForeignKey, Integer, Column, Integer, String
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
@@ -68,19 +68,21 @@ class BaggageBelt(Base):
     terminal_id = Column(UUID(as_uuid=True), ForeignKey('terminal.id'))
     terminal = relationship('Terminal',back_populates = 'baggages')
     current_flight = Column(UUID(as_uuid=True), ForeignKey('flight.id'))
-    free_at = Column(DATETIME)
+    free_at = Column(DateTime)
 
 class Flight(Base):
     __tablename__ = 'flight'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     airline = Column(String)
     flight_code = Column(String)
-    source = relationship('Airport')
+    
     source_airport_id = Column(UUID(as_uuid=True), ForeignKey('airport.id'))
-    destination = relationship('Airport')
+    source = relationship('Airport', foreign_keys=[source_airport_id])
+    
     destination_id = Column(UUID(as_uuid=True), ForeignKey('airport.id'))
-    arrival_time = Column(TIME)
-    departure_time = Column(TIME)
+    destination = relationship('Airport', foreign_keys=[destination_id])
+    arrival_time = Column(Time)
+    departure_time = Column(Time)
     aircraft_id = Column(UUID(as_uuid=True), ForeignKey('aircraft.id'))
     aircraft = relationship('Aircraft')
     
@@ -141,8 +143,19 @@ class Terminal(Base):
     number = Column(String)
     capacity = Column(Integer)
     status = Column(String)
-    airport_id = Column(UUID(as_uuid=True), ForeignKey('airport.id'))
+    airport_id = Column(String, ForeignKey('airport.code'))
     airport = relationship('Airport',back_populates = 'terminals')
     type = Column(String)
     gates = relationship('Gate', back_populates='terminal')
     baggages = relationship('BaggageBelt',back_populates='terminal')
+
+class Gate(Base):
+    __tablename__ = 'gate'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    status = Column(String)
+    capacity = Column(Integer)
+    is_active = Column(Boolean)
+    terminal_id = Column(UUID(as_uuid=True), ForeignKey('terminal.id'))
+    terminal = relationship('Terminal',back_populates = 'gates')
+    current_flight = Column(UUID(as_uuid=True), ForeignKey('flight.id'))
+    free_at = Column(DateTime)

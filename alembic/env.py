@@ -5,9 +5,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from models import airline_counter,airline_staff,airport_airport_type,airport_staff,airport,airport_type,baggage_belt,flight,flight_instance,gate_baggage_history,gate,passenger,runway,terminal,airline
 
-from models.base import Base
+from models import Base
 
 import os
 

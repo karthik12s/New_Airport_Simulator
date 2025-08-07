@@ -1,9 +1,11 @@
 from flask import Flask
 from routes.airport import airport_blueprint
+from routes.terminal import terminal_blueprint
 
 app = Flask(__name__)
 
 app.register_blueprint(airport_blueprint)
+app.register_blueprint(terminal_blueprint)
 app.run(debug=True)
 
 # from models.airport import Airport
