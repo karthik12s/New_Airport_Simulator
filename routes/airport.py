@@ -11,27 +11,27 @@ def create_airport():
     data = request.json
     return_airport = airport.create_airport(data=data)
     if return_airport:
-        return return_airport,201
-    return {"message":"Exception occured, Please retry"},201
+        return return_airport,200
+    return {"message":"Exception occured, Please retry"},200
     
-@airport_blueprint.route('/get_airport',methods = ['POST'])
+@airport_blueprint.route('/get_airport')
 def get_airport():
-    data = request.json
+    data = request.args.get("code",default='',type=str)
     try:
-        return_aiport = airport.get_airport_by_code_handler(data['code'])
-        if return_aiport:
-            return return_aiport,201
-        return {"message":"Airport Not found"},201
+        return_airport = airport.get_airport_by_code_handler(data['code'])
+        if return_airport:
+            return return_airport,200
+        return {"message":"Airport Not found"},200
     except Exception as e:
-        return {"message":"Exception occured, Please retry"},201
+        return {"message":"Exception occured, Please retry"},200
 
 @airport_blueprint.route("/update_airport",methods = ['POST'])
 def update_airport():
     data = request.json
     return_airport = airport.update_airport(data)
     if return_airport:
-        return {"message":"Update successfull","data":return_airport},201
-    return {"message":"Update failed, Please retry"},201
+        return {"message":"Update successfull","data":return_airport},200
+    return {"message":"Update failed, Please retry"},200
 
 @airport_blueprint.route("/update_airline_status",methods= ['POST'])
 def update_airline_status():
@@ -39,10 +39,10 @@ def update_airline_status():
     try:
         return_mapping = airport_airline.update_airport_airline_mapping(data=data)
         if return_mapping:
-            return return_mapping,201
-        return {"message":"Airport Not found"},201
+            return return_mapping,200
+        return {"message":"Airport Not found"},200
     except Exception as e:
-        return {"message":"Exception occured, Please retry"},201
+        return {"message":"Exception occured, Please retry"},200
 
 
 

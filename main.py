@@ -2,6 +2,7 @@ from flask import Flask
 from routes.airport import airport_blueprint
 from routes.terminal import terminal_blueprint
 from routes.airline import airline_blueprint
+from routes.baggage import baggage_blueprint
 from routes.runway import runway_blueprint
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app.register_blueprint(airport_blueprint)
 app.register_blueprint(terminal_blueprint)
 app.register_blueprint(airline_blueprint)
 app.register_blueprint(runway_blueprint)
+app.register_blueprint(baggage_blueprint)
 app.run(debug=True)
 
 # from models.airport import Airport

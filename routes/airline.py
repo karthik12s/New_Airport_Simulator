@@ -17,9 +17,9 @@ def create_airline():
 def get_airline():
     code = request.args.get("code",default="",type=str)
     try:
-        return_aiport = airline.get_airline_by_code_handler(code)
-        if return_aiport:
-            return return_aiport,201
+        return_airport = airline.get_airline_by_code_handler(code)
+        if return_airport:
+            return return_airport,201
         return {"message":"Airline Not found"},201
     except Exception as e:
         return {"message":"Exception occured, Please retry"},201

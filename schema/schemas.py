@@ -214,6 +214,7 @@ class BaggageBeltSchema(SQLAlchemySchema):
         load_instance = True
 
     id = auto_field()
+    number = auto_field()
     status = auto_field()
     capacity = auto_field()
     is_active = auto_field()
@@ -224,15 +225,16 @@ class BaggageBeltSchema(SQLAlchemySchema):
 class BaggageBeltCreateSchema(SQLAlchemySchema):
     class Meta:
         model = BaggageBelt
-        load_instance = True
-        exclude = ('id',)
 
     status = auto_field()
+    number = auto_field()
     capacity = auto_field()
     is_active = auto_field()
     terminal_id = auto_field()
     current_flight = auto_field()
     free_at = auto_field()
+    airport_code = fields.String(required=True)
+    terminal_number = fields.String(required=True)
 
 class BaggageBeltOutputSchema(SQLAlchemySchema):
     class Meta:
@@ -240,6 +242,7 @@ class BaggageBeltOutputSchema(SQLAlchemySchema):
         load_instance = True
 
     id = auto_field()
+    number = auto_field()
     status = auto_field()
     capacity = auto_field()
     is_active = auto_field()

@@ -45,5 +45,5 @@ def get_runway_by_airport_and_number(airport_id = '',identifier1=''):
 def get_runway_by_airport_and_number_handler(code,identifier1):
     return runway_schema_full.dump(get_runway_by_airport_and_number(code,identifier1))
 
-def get_runways_by_aiport(code):
+def get_runways_by_airport(code):
     return runway_schema_full_multi.dump(db_session.query(Runway).filter_by(airport_id = code).all())

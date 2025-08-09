@@ -62,6 +62,7 @@ class AirportStaff(Base):
 class BaggageBelt(Base):
     __tablename__ = 'baggage_belt'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    number = Column(String)
     status = Column(String)
     capacity = Column(Integer)
     is_active = Column(Boolean)
@@ -69,6 +70,9 @@ class BaggageBelt(Base):
     terminal = relationship('Terminal',back_populates = 'baggages')
     current_flight = Column(UUID(as_uuid=True), ForeignKey('flight.id'))
     free_at = Column(DateTime)
+    __table_args__ = (
+        UniqueConstraint('number', 'terminal_id', name='uix_my_table_number_terminal_id'),
+    )
 
 class Flight(Base):
     __tablename__ = 'flight'

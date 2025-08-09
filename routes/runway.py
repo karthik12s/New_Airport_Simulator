@@ -18,9 +18,9 @@ def create_runway():
 def get_runway():
     data = request.json
     try:
-        return_aiport = runway.get_runway_by_code_handler(data['code'])
-        if return_aiport:
-            return return_aiport,200
+        return_airport = runway.get_runway_by_code_handler(data['code'])
+        if return_airport:
+            return return_airport,200
         return {"message":"Runway Not found"},200
     except Exception as e:
         return {"message":"Exception occured, Please retry"},200
@@ -37,10 +37,10 @@ def update_runway():
 def get_runways():
     try:
         airport_code = request.args.get("airport_id",default="",type=str)
-        runways_result = runway.get_runways_by_aiport(code=airport_code)
+        runways_result = runway.get_runways_by_airport(code=airport_code)
         if runways_result:
             print(list(runways_result))
             return {"message":"Fetch successful",'data':runways_result},200
-        return {"message":"Couldn't get the Runways of given aiport",'data':None},200
+        return {"message":"Couldn't get the Runways of given airport",'data':None},200
     except Exception as e:
         return {"message":"Fetch failed",'data':None},200
