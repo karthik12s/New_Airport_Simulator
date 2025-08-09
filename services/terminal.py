@@ -39,5 +39,5 @@ def update_terminal(terminal_id, **kwargs):
 def get_terminal_by_airport_and_number(airport_id = '',number = 0):
     return db_session.query(Terminal).filter_by(airport_id=airport_id,number=number).first()
 
-def get_terminal_by_airport_and_number_handler(code):
-    return terminal_schema_full.dump(get_terminal_by_airport_and_number(code))
+def get_terminal_by_airport_and_number_handler(code,number):
+    return terminal_schema_full.dump(get_terminal_by_airport_and_number(code,number))

@@ -26,6 +26,16 @@ class AirportCreateSchema(SQLAlchemySchema):
     code = auto_field()
     location = auto_field()
 
+class AirportAirlineMappingSchema(SQLAlchemySchema):
+    class Meta:
+        model = AirportAirlineMapping
+        load_instance = True
+
+    airport = auto_field()
+    airline = auto_field()
+    is_approved = auto_field()
+    is_active = auto_field()
+
 class AirportOutputSchema(SQLAlchemySchema):
     class Meta:
         model = Airport
@@ -149,7 +159,6 @@ class AirlineCreateSchema(SQLAlchemySchema):
     class Meta:
         model = Airline
         load_instance = True
-        exclude = ('id',)
 
     code = auto_field()
     base = auto_field()
@@ -402,7 +411,6 @@ class RunwayCreateSchema(SQLAlchemySchema):
     class Meta:
         model = Runway
         load_instance = True
-        exclude = ('id',)
 
     identifier1 = auto_field()
     identifier2 = auto_field()

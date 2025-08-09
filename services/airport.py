@@ -24,15 +24,18 @@ def create_airport(data):
         db_session.rollback()
     return None
 
-def update_airport(airport_id, **kwargs):
-    airport = db_session.query(Airport).filter_by(id=airport_id).first()
-    if not airport:
-        return None
-    for key, value in kwargs.items():
-        setattr(airport, key, value)
-    db_session.commit()
-    return airport
-
+def update_airport(data):
+    try:
+        airport = get_airport_by_code(data['code'])
+        if not airport:
+            return None
+        for key, value in data.items():
+            setattr(airport, key, value)
+        db_session.commit()
+        return AirportSchema.dump(airport) 
+    except Exception as e:
+        print(e)
+    return None
 def get_airport_by_code(code):
     return db_session.query(Airport).filter_by(code=code).first()
 

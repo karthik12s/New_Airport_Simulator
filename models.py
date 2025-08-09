@@ -1,6 +1,6 @@
 
 from sqlalchemy import (
-     Time, Boolean, DateTime, ForeignKey, Integer, Column, Integer, String
+     Time, Boolean, DateTime, ForeignKey, Integer, Column, Integer, String,UniqueConstraint
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
@@ -47,7 +47,7 @@ class Airline(Base):
     id = Column(Integer, primary_key=True)
     code = Column(String, unique=True, nullable=False)
     base = Column(String, nullable=False)
-    name = Column(String,nullable=False)
+    name = Column(String,unique=True,nullable=False)
     def __repr__(self):
         return f"<Airline(code={self.code}, base={self.base})>"
 
@@ -130,12 +130,11 @@ class Runway(Base):
     identifier2 = Column(String, nullable=False)
     length = Column(Integer, nullable=False)
     surface_type = Column(String, nullable=False)
-    airport_id = Column(UUID(as_uuid=True), ForeignKey('airport.id'))
+    airport_id = Column(String, ForeignKey('airport.code'),nullable=False)
     airport = relationship('Airport',back_populates = "runways")
+    status = Column(String)
+    is_active = Column(Boolean,default=False)
 
-
-    def __repr__(self):
-        return f"<Runway(identifier={self.identifier}, length={self.length}, surface_type={self.surface_type})>"
 
 class Terminal(Base):
     __tablename__ = 'terminal'
@@ -159,3 +158,15 @@ class Gate(Base):
     terminal = relationship('Terminal',back_populates = 'gates')
     current_flight = Column(UUID(as_uuid=True), ForeignKey('flight.id'))
     free_at = Column(DateTime)
+
+
+class AirportAirlineMapping(Base):
+    __tablename__ = 'airportairlinemapping'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    airport = Column(String)
+    airline = Column(String)
+    is_active = Column(Boolean)
+    is_approved = Column(Boolean)
+    __table_args__ = (
+        UniqueConstraint('airport', 'airline', name='uix_my_table_airport_airline'),
+    )

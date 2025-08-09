@@ -23,8 +23,15 @@ def get_terminal():
         return {"message":"Airport Not found"},201
     except Exception as e:
         return {"message":"Exception occured, Please retry"},201
-def add_airline():
-    pass
+
+
+@terminal_blueprint.route("/update_terminal",methods = ['POST'])
+def update_terminal():
+    data = request.json
+    return_terminal = terminal.update_terminal(data)
+    if return_terminal:
+        return {"message":"Update successfull","data":terminal_schema_full.dump(return_terminal)},201
+    return {"message":"Update failed, Please retry"},201
 
 
 
