@@ -445,6 +445,7 @@ class TerminalSchema(SQLAlchemySchema):
     status = auto_field()
     airport_id = auto_field()
     type = auto_field()
+    is_active = auto_field()
 
 class TerminalCreateSchema(SQLAlchemySchema):
     class Meta:
@@ -456,6 +457,7 @@ class TerminalCreateSchema(SQLAlchemySchema):
     status = auto_field()
     airport_id = auto_field()
     type = auto_field()
+    is_active = auto_field()
 
 class TerminalOutputSchema(SQLAlchemySchema):
     class Meta:
@@ -466,6 +468,7 @@ class TerminalOutputSchema(SQLAlchemySchema):
     number = auto_field()
     status = auto_field()
     type = auto_field()
+    is_active = auto_field()
 
 # --------------------- GATE ---------------------
 

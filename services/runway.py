@@ -30,14 +30,14 @@ def create_runway(data):
         db_session.rollback()
     return None
 
-def update_runway(runway_id, **kwargs):
-    runway = db_session.query(Runway).filter_by(id=runway_id).first()
+def update_runway(data):
+    runway = get_runway_by_airport_and_number(airport_id=data['airport_id'],identifier1=data['identifier1'])
     if not runway:
         return None
-    for key, value in kwargs.items():
+    for key, value in data.items():
         setattr(runway, key, value)
     db_session.commit()
-    return runway
+    return runway_schema_full.dump(runway)
 
 def get_runway_by_airport_and_number(airport_id = '',identifier1=''):
     return db_session.query(Runway).filter(and_(Runway.airport_id == airport_id, or_(Runway.identifier1==identifier1,Runway.identifier2==identifier1))).first()

@@ -151,6 +151,7 @@ class Terminal(Base):
     type = Column(String)
     gates = relationship('Gate', back_populates='terminal')
     baggages = relationship('BaggageBelt',back_populates='terminal')
+    is_active = Column(Boolean,default= False)
 
 class Gate(Base):
     __tablename__ = 'gate'

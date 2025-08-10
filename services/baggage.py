@@ -1,3 +1,4 @@
+from sqlalchemy import update
 from models import BaggageBelt
 from database import db_session  # your SQLAlchemy session setup
 from sqlalchemy.exc import SQLAlchemyError
@@ -54,3 +55,16 @@ def get_baggage_by_terminal_and_number(airport_code = '',terminal_number = '',nu
 
 def get_baggage_by_terminal_and_number_handler(airport_code = '',terminal_number = '',number = '0'):
     return baggage_schema_full.dump(get_baggage_by_terminal_and_number(airport_code=airport_code,terminal_number=terminal_number,number=number))
+
+baggage_schema_full_multi = BaggageBeltSchema(many=True)
+
+def get_baggages_by_terminal(airport_code = '',terminal_number = ''):
+    terminal = get_terminal_by_airport_and_number_handler(code=airport_code,number=terminal_number)
+    print(terminal,airport_code,terminal_number)
+    if terminal:
+        return db_session.query(BaggageBelt).filter_by(terminal_id = terminal['id']).all()
+    return None
+
+def get_baggages_by_terminal_handler(airport_code = '',terminal_number = ''):
+    return baggage_schema_full_multi.dump(get_baggages_by_terminal(airport_code=airport_code,terminal_number=terminal_number))
+
