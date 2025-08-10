@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from services import baggage
+from services import utils,terminal
 from schema.schemas import BaggageBeltCreateSchema,BaggageBeltOutputSchema
 from database import db_session
 baggage_blueprint = Blueprint('baggage', __name__,
@@ -67,7 +68,9 @@ def update_baggage():
 @baggage_blueprint.route("/update_baggage_status_for_terminal",methods = ['POST'])
 def update_baggage_status_by_terminal():
     data = request.json
-    return_baggage = baggage.bulk_update_baggage_status(data['airport_code'],data['terminal_number'],data['status'])
+    terminal_val = terminal.get_terminal_by_airport_and_number(data['airport_code'],data['terminal_number'])
+    if terminal_val:
+        return_baggage = utils.bulk_update_baggage_status(terminal_id=terminal_val.id, status=data['status'])
     if return_baggage:
         return {"message":"Update successfull","data":return_baggage},200
     return {"message":"Update failed, Please retry"},200

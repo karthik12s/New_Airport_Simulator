@@ -260,7 +260,8 @@ class FlightSchema(SQLAlchemySchema):
     destination_id = auto_field()
     arrival_time = auto_field()
     departure_time = auto_field()
-    aircraft_id = auto_field()
+    is_active = auto_field()
+    recurring = auto_field()
 
 class FlightCreateSchema(SQLAlchemySchema):
     class Meta:
@@ -274,7 +275,8 @@ class FlightCreateSchema(SQLAlchemySchema):
     arrival_time = auto_field()
     departure_time = auto_field()
     aircraft_id = auto_field()
-
+    is_active = auto_field()
+    recurring = auto_field()
 class FlightOutputSchema(SQLAlchemySchema):
     class Meta:
         model = Flight
@@ -283,7 +285,9 @@ class FlightOutputSchema(SQLAlchemySchema):
     id = auto_field()
     flight_code = auto_field()
     airline = auto_field()
-
+    aircraft_id = auto_field()
+    is_active = auto_field()
+    recurring = auto_field()
 # --------------------- FLIGHT INSTANCE ---------------------
 
 class FlightInstanceSchema(SQLAlchemySchema):

@@ -90,6 +90,8 @@ class Flight(Base):
     departure_time = Column(Time)
     aircraft_id = Column(UUID(as_uuid=True), ForeignKey('aircraft.id'))
     aircraft = relationship('Aircraft')
+    recurring = Column(Boolean,default = False)
+    is_active = Column(Boolean, default = False)
     
 class FlightInstance(Base):
     __tablename__ = 'flight_instance'

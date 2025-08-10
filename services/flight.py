@@ -54,3 +54,5 @@ def get_flight_by_code(flight_code = ''):
 def get_flight_by_code_handler(flight_code = ''):
     return flight_schema_full.dump(get_flight_by_code(flight_code))
 
+def get_flights_by_params(**kwargs):
+    return flight_schema_full_multi.dump(db_session.query(Flight).filter_by(**kwargs).all())
