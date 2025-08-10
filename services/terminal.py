@@ -2,7 +2,7 @@ from models import Terminal
 from database import db_session  # your SQLAlchemy session setup
 from sqlalchemy.exc import SQLAlchemyError
 from schema.schemas import TerminalCreateSchema,TerminalSchema
-from services.utils import bulk_update_baggage_status
+from services.utils import bulk_update_baggage_status,bulk_update_gate_status
 terminal_schema = TerminalCreateSchema()
 terminal_schema_full = TerminalSchema()
 def create_terminal(data):
@@ -34,8 +34,9 @@ def update_terminal(data):
         return None
     for key, value in data.items():
         if key == 'is_active' and terminal.is_active!=value:
-            result = bulk_update_baggage_status(terminal_id=terminal.id,status=value)
-            if not result:
+            baggage_result = bulk_update_baggage_status(terminal_id=terminal.id,status=value)
+            gate_result = bulk_update_gate_status(terminal_id=terminal.id,status=value)
+            if not (baggage_result or gate_result):
                 return None
         setattr(terminal, key, value)
     db_session.commit()

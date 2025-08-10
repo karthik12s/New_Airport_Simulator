@@ -77,13 +77,14 @@ class BaggageBelt(Base):
 class Flight(Base):
     __tablename__ = 'flight'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    airline = Column(String)
-    flight_code = Column(String)
+    airline = Column(String,ForeignKey('airlines.code'))
+    airline_relation = relationship('Airline', foreign_keys=[airline])
+    flight_code = Column(String,unique = True)
     
-    source_airport_id = Column(UUID(as_uuid=True), ForeignKey('airport.id'))
+    source_airport_id = Column(String, ForeignKey('airport.code'))
     source = relationship('Airport', foreign_keys=[source_airport_id])
     
-    destination_id = Column(UUID(as_uuid=True), ForeignKey('airport.id'))
+    destination_id = Column(String, ForeignKey('airport.code'))
     destination = relationship('Airport', foreign_keys=[destination_id])
     arrival_time = Column(Time)
     departure_time = Column(Time)
@@ -156,6 +157,7 @@ class Terminal(Base):
 class Gate(Base):
     __tablename__ = 'gate'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    number = Column(String)
     status = Column(String)
     capacity = Column(Integer)
     is_active = Column(Boolean)
@@ -163,7 +165,9 @@ class Gate(Base):
     terminal = relationship('Terminal',back_populates = 'gates')
     current_flight = Column(UUID(as_uuid=True), ForeignKey('flight.id'))
     free_at = Column(DateTime)
-
+    __table_args__ = (
+        UniqueConstraint('number', 'terminal_id', name='uix_gate_number_terminal_id'),
+    )
 
 class AirportAirlineMapping(Base):
     __tablename__ = 'airportairlinemapping'

@@ -62,7 +62,6 @@ class AircraftCreateSchema(SQLAlchemySchema):
     class Meta:
         model = Aircraft
         load_instance = True
-        exclude = ('id',)
 
     name = auto_field()
     capacity = auto_field()
@@ -267,8 +266,7 @@ class FlightCreateSchema(SQLAlchemySchema):
     class Meta:
         model = Flight
         load_instance = True
-        exclude = ('id',)
-
+        
     airline = auto_field()
     flight_code = auto_field()
     source_airport_id = auto_field()
@@ -484,12 +482,11 @@ class GateSchema(SQLAlchemySchema):
     terminal_id = auto_field()
     current_flight = auto_field()
     free_at = auto_field()
+    number = auto_field()
 
 class GateCreateSchema(SQLAlchemySchema):
     class Meta:
         model = Gate
-        load_instance = True
-        exclude = ('id',)
 
     status = auto_field()
     capacity = auto_field()
@@ -497,6 +494,9 @@ class GateCreateSchema(SQLAlchemySchema):
     terminal_id = auto_field()
     current_flight = auto_field()
     free_at = auto_field()
+    number = auto_field()
+    airport_code = fields.String(required=True)
+    terminal_number = fields.String(required=True)
 
 class GateOutputSchema(SQLAlchemySchema):
     class Meta:
@@ -507,3 +507,4 @@ class GateOutputSchema(SQLAlchemySchema):
     status = auto_field()
     capacity = auto_field()
     is_active = auto_field()
+    number = auto_field()
