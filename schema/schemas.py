@@ -1,6 +1,6 @@
 
 from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
-from marshmallow import fields
+from marshmallow import EXCLUDE, fields
 from models import *
 
 # --------------------- AIRPORT ---------------------
@@ -294,6 +294,7 @@ class FlightInstanceSchema(SQLAlchemySchema):
     class Meta:
         model = FlightInstance
         load_instance = True
+        unknown = EXCLUDE
 
     id = auto_field()
     flight_id = auto_field()
@@ -303,12 +304,13 @@ class FlightInstanceSchema(SQLAlchemySchema):
     baggage_belt_id = auto_field()
     passenger_count = auto_field()
     aircraft_id = auto_field()
+    airline = auto_field()
 
 class FlightInstanceCreateSchema(SQLAlchemySchema):
     class Meta:
         model = FlightInstance
-        load_instance = True
-        exclude = ('id',)
+        # load_instance = True
+        # exclude = ('id',)
 
     flight_id = auto_field()
     departure_time = auto_field()
@@ -317,6 +319,7 @@ class FlightInstanceCreateSchema(SQLAlchemySchema):
     baggage_belt_id = auto_field()
     passenger_count = auto_field()
     aircraft_id = auto_field()
+    airline = auto_field()
 
 class FlightInstanceOutputSchema(SQLAlchemySchema):
     class Meta:
@@ -326,6 +329,7 @@ class FlightInstanceOutputSchema(SQLAlchemySchema):
     id = auto_field()
     flight_id = auto_field()
     passenger_count = auto_field()
+    airline = auto_field()
 
 # --------------------- GATE BAGGAGE HISTORY ---------------------
 

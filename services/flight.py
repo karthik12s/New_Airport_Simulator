@@ -26,6 +26,7 @@ def create_flight(data):
         return flight_schema_full.dump(flight_search_result) 
 
     except SQLAlchemyError as e:
+        print(e)
         db_session.rollback()
     return None
 
@@ -56,3 +57,13 @@ def get_flight_by_code_handler(flight_code = ''):
 
 def get_flights_by_params(**kwargs):
     return flight_schema_full_multi.dump(db_session.query(Flight).filter_by(**kwargs).all())
+
+from datetime import datetime,timedelta
+def get_next_x_hours_flights(airport_code = '',hours = 4):
+        print((datetime.now()+timedelta(hours=hours)).time(),type((datetime.now()+timedelta(hours=hours)).time()))
+        val = db_session.query(Flight).where(Flight.source_airport_id == airport_code,Flight.departure_time<=(datetime.now()+timedelta(hours=hours)).time()).all()
+        
+        # 
+        # print(val.departure_time <(datetime.now()+timedelta(hours=hours)).time())
+        # print(val.departure_time,(datetime.now()+timedelta(hours=hours)).time())
+        return flight_schema_full_multi.dump(val)

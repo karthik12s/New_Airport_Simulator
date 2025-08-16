@@ -6,6 +6,7 @@ from schema.schemas import BaggageBeltCreateSchema,BaggageBeltSchema
 from services.terminal import get_terminal_by_airport_and_number_handler
 baggage_schema = BaggageBeltCreateSchema()
 baggage_schema_full = BaggageBeltSchema()
+from real_time_events import socketio
 def create_baggage(data):
     """
     Creates a new baggage using validated input data.
@@ -15,6 +16,7 @@ def create_baggage(data):
         baggage_inputs = baggage_schema.load(data= data,session=db_session)
         print(baggage_inputs,list(baggage_inputs))
         terminal = get_terminal_by_airport_and_number_handler(code=baggage_inputs['airport_code'],number=baggage_inputs['terminal_number'])
+
         baggage_search_result = get_baggage_by_terminal_and_number(airport_code=terminal['airport_id'],terminal_number=terminal['number'],number=baggage_inputs['number'])
         print(baggage_search_result)
         if baggage_search_result == None:
@@ -24,6 +26,10 @@ def create_baggage(data):
             baggage_inputs_sch = baggage_schema_full.load(baggage_inputs,session=db_session)
             db_session.add(baggage_inputs_sch)
             db_session.commit()
+            if socketio: 
+                new_belt_data = baggage_schema_full.dump(baggage_inputs_sch)
+                socketio.emit('new_baggage_belt_created', new_belt_data) 
+                socketio.emit('system_notification', {'type': 'info', 'message': f'New Baggage Belt {new_belt_data["number"]} created!'}) 
             return baggage_schema_full.dump(baggage_inputs)
 
         return baggage_schema_full.dump(baggage_search_result) 
@@ -66,5 +72,7 @@ def get_baggages_by_terminal(airport_code = '',terminal_number = ''):
     return None
 
 def get_baggages_by_terminal_handler(airport_code = '',terminal_number = ''):
-    return baggage_schema_full_multi.dump(get_baggages_by_terminal(airport_code=airport_code,terminal_number=terminal_number))
-
+    baggages = baggage_schema_full_multi.dump(get_baggages_by_terminal(airport_code=airport_code,terminal_number=terminal_number))
+    socketio.emit('get_all_baggages', baggages) 
+    # socketio.emit('system_notification', {'type': 'info', 'message': f'New Baggage Belt {new_belt_data["number"]} created!'}) 
+    return baggages

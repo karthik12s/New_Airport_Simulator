@@ -25,6 +25,21 @@ def get_flight():
         print(e)
         return {"message":"Exception occured, Please retry"},200
 
+@flight_blueprint.route('/get_flights_by_time')
+def get_flights_by_time():
+    airport_code = request.args.get("source_airport_id",default='',type=str)
+    departure_time = request.args.get("departure_time",default=4,type=int)
+    try:
+        return_flight = flight.get_next_x_hours_flights(airport_code=airport_code,hours= departure_time)
+        print("abc")
+        print(return_flight)
+        if return_flight:
+            return return_flight,200
+        return {"message":"Flight Not found"},200
+    except Exception as e:
+        print(e)
+        return {"message":"Exception occured, Please retry"},200
+
 @flight_blueprint.route('/get_flights_for_airline')
 def get_flight_for_terminal():
     airline_code = request.args.get("airline_code",default='',type=str)
